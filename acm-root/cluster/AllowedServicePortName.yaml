@@ -1,0 +1,19 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: AllowedServicePortName
+metadata:
+  name: port-name-constraint
+spec:
+  enforcementAction: deny
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Service"]
+    # namespaces: ["dev"]
+    # alternatively you can limit it to namespaces where istio-injection is enabled
+    namespaceSelector:
+      matchExpressions:
+        - key: istio-injection
+          operator: In
+          values: ["enabled"]
+  parameters:
+    prefixes: ["http"]
